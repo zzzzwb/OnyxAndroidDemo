@@ -1,6 +1,7 @@
 package com.onyx.android.eink.pen.demo.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ import com.onyx.android.sdk.rx.ObservableHolder;
 import com.onyx.android.sdk.rx.RxCallback;
 import com.onyx.android.sdk.rx.RxFilter;
 import com.onyx.android.sdk.rx.RxManager;
+import com.onyx.android.sdk.utils.BroadcastHelper;
 import com.onyx.android.sdk.utils.EventBusUtils;
 import com.onyx.android.sdk.utils.SystemPropertiesUtil;
 import com.onyx.android.sdk.utils.ViewUtils;
@@ -67,6 +69,9 @@ import java.util.concurrent.TimeUnit;
 
 public class PenDemoActivity extends Activity {
     private static final String TAG = PenDemoActivity.class.getSimpleName();
+    private static final String ONYX_ACTION_REQUIRE_FLOAT_BUTTON_STATUS = "onyx.action.REQUIRE_FLOAT_BUTTON_STATUS";
+    private static final String ARGS_STATUS = "args_status";
+
     private ActivityPenDemoBinding binding;
 
     private final GlobalDeviceReceiver deviceReceiver = new GlobalDeviceReceiver();
@@ -91,9 +96,16 @@ public class PenDemoActivity extends Activity {
 
         EpdController.enablePost(binding.getRoot(), 1);
         deviceReceiver.enable(this, true);
+        setNeedReceiveFloatButtonTouchStatus(true);
         EventBusUtils.ensureRegister(getPenManager().getEventBus(), this);
         initView();
         initListener();
+    }
+
+    private void setNeedReceiveFloatButtonTouchStatus(boolean enable) {
+        Intent intent = new Intent(ONYX_ACTION_REQUIRE_FLOAT_BUTTON_STATUS);
+        intent.putExtra(ARGS_STATUS, enable);
+        BroadcastHelper.sendBroadcast(this, intent);
     }
 
     @NotNull
@@ -113,6 +125,7 @@ public class PenDemoActivity extends Activity {
         getPenManager().destroy();
         surfaceChangedFilter.dispose();
         deviceReceiver.enable(this, false);
+        setNeedReceiveFloatButtonTouchStatus(false);
         EventBusUtils.ensureUnregister(getPenManager().getEventBus(), this);
     }
 
@@ -321,6 +334,10 @@ public class PenDemoActivity extends Activity {
                 public void onRawDrawingTouchPointListReceived(TouchPointList touchPointList) {
                     if (getPenBundle().isErasing()) {
                         onRawErasingTouchPointListReceived(touchPointList);
+                        return;
+                    }
+                    if (floatButtonActivated || demoFloatMenuActivated) {
+                        Log.d(TAG, "FloatButton or demoFloatMenu activated, return");
                         return;
                     }
                     Log.d(TAG, "onRawDrawingTouchPointListReceived");
