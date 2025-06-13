@@ -27,7 +27,7 @@ import com.onyx.android.eink.pen.demo.event.ActivityFocusChangedEvent;
 import com.onyx.android.eink.pen.demo.event.ApplyFastModeEvent;
 import com.onyx.android.eink.pen.demo.event.FloatButtonChangedEvent;
 import com.onyx.android.eink.pen.demo.event.FloatButtonMenuStateChangedEvent;
-import com.onyx.android.eink.pen.demo.event.FloatMenuStateChangeEvent;
+import com.onyx.android.eink.pen.demo.event.DemoFloatMenuStateChangeEvent;
 import com.onyx.android.eink.pen.demo.event.NotificationPanelChangeEvent;
 import com.onyx.android.eink.pen.demo.event.PenEvent;
 import com.onyx.android.eink.pen.demo.event.PopupWindowChangeEvent;
@@ -79,7 +79,7 @@ public class PenDemoActivity extends Activity {
     private boolean statusBarShowing;
     private boolean NotificationPanelShowing;
     private boolean floatButtonActivated;
-    private boolean floatMenuActivated;
+    private boolean demoFloatMenuActivated;
     private boolean hasFocus = true;
 
     private final View.OnClickListener brushButtonClickListener = this::onBrushButtonClickImpl;
@@ -455,13 +455,13 @@ public class PenDemoActivity extends Activity {
                 && !statusBarShowing
                 && !NotificationPanelShowing
                 && !floatButtonActivated
-                && !floatMenuActivated;
+                && !demoFloatMenuActivated;
         final boolean input = resumeInput
                 && hasFocus
                 && !statusBarShowing
                 && !NotificationPanelShowing
                 && !floatButtonActivated
-                && !floatMenuActivated;
+                && !demoFloatMenuActivated;
         if (!render && !input) {
             return;
         }
@@ -519,8 +519,8 @@ public class PenDemoActivity extends Activity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onFloatMenuStateChangeEvent(FloatMenuStateChangeEvent event) {
-        floatMenuActivated = event.active;
+    public void onDemoFloatMenuStateChangeEvent(DemoFloatMenuStateChangeEvent event) {
+        demoFloatMenuActivated = event.active;
         refreshScreen();
     }
 
