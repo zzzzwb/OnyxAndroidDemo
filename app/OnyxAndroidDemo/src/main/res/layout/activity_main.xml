@@ -8,7 +8,7 @@
             type="com.android.onyx.demo.MainActivity" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/activity_main"
         android:layout_width="match_parent"
@@ -134,7 +134,14 @@
                 android:layout_height="wrap_content"
                 android:onClick="openBooxSettingDemo"
                 android:text="Boox Setting Demo" />
+
+            <Button
+                android:id="@+id/button_animation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClickButtonAnimation"
+                android:text="翻页动画演示" />
         </LinearLayout>
 
-    </RelativeLayout>
+    </ScrollView>
 </layout>

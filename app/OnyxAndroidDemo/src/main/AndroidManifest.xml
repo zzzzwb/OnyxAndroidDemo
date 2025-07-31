@@ -35,6 +35,7 @@
         <activity android:name="com.android.onyx.demo.RefreshModeDemoActivity" />
         <activity android:name="com.android.onyx.demo.EacDemoActivity" />
         <activity android:name="com.android.onyx.demo.BooxSettingsDemoActivity" />
+        <activity android:name="com.android.onyx.demo.AnimationActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"

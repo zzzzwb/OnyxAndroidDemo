@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
     public void openBooxSettingDemo(View view) {
         go(BooxSettingsDemoActivity.class);
     }
+    
+    public void onClickButtonAnimation(View view) {
+        go(AnimationActivity.class);
+    }
 
     private void go(Class<?> activityClass) {
         startActivity(new Intent(this, activityClass));
